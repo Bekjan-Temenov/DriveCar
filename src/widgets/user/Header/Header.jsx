@@ -1,58 +1,71 @@
-import React from "react";
-import Container from "../../../shared/helpers/Container";
-import backgroundImage from "../../../shared/assets/background.png";
-import { FaInstagram, FaTwitter, FaEnvelope } from "react-icons/fa";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import logo from "../../../shared/assets/Vector.png";
+import { FaSearch } from "react-icons/fa";
+import bgImage from "../../../shared/assets/background.png";
+import Container from "../../../shared/helpers/Container.jsx";
 
 const Header = () => {
-    return (
+    const location = useLocation();
+    const hiddenPages = ["/AdminCarPage", "/AdminAddCar","/login", "/Forgot", "/VerifyForgot"];
+    const isHiddenPage = hiddenPages.some((path) => location.pathname.startsWith(path));
+
+    if (isHiddenPage) return null;
+
+    const isAllCarsPage = location.pathname === "/AllCars";
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const headerContent = (
         <header
-            className="relative w-full h-[50vh] text-white bg-cover bg-center font-montserrat"
-            style={{ backgroundImage: `url(${backgroundImage})` }}
+            className={`w-full h-[120px] flex justify-center z-50 transition-all duration-300 ${
+                isAllCarsPage ? "relative" : "fixed top-0 left-0 bg-transparent"
+            }`}
+            style={isAllCarsPage ? {
+                backgroundImage: `linear-gradient(270.77deg, #0D0D0E -30.17%, rgba(10, 10, 11, 0.85) 54.39%, #0D0D0E 128.85%), url(${bgImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                filter: "brightness(2)"
+            } : {}}
         >
-
-            <div className="w-full flex justify-between items-center py-4 px-6 bg-black bg-opacity-50">
-                <Container>
-                    <div className="flex justify-between items-center w-full">
-
-                        <div className="text-2xl font-bold">AUTO</div>
-
-
-                        <nav className="hidden md:flex gap-6">
-                            <a href="#" className="hover:text-blue-500">Главная</a>
-                            <a href="#" className="hover:text-blue-500">О компании</a>
-                            <a href="#" className="hover:text-blue-500">Услуги</a>
-                            <a href="#" className="hover:text-blue-500">Избранное</a>
-                        </nav>
-
-
-                        <button className="border px-4 py-2 rounded hover:bg-white hover:text-black transition">
-                            Регистрация
-                        </button>
+            <div className={`flex justify-between items-center ${isAllCarsPage ? "w-full px-12" : "w-[1400px] px-12 py-5"}`}>
+                <div className={`flex items-center ${isAllCarsPage ? "gap-[20px]" : "gap-[300px]"}`}>
+                    <div className="flex items-center gap-2">
+                        <img src={logo} alt="Logo" className="w-[40px] h-[40px]" />
+                        <span className="text-[30px] font-medium leading-[40px] font-exo text-white">AUTO</span>
                     </div>
-                </Container>
-            </div>
 
-            <Container>
-                <div className="text-center mt-16">
-                    <h1 className="text-5xl font-bold">Выбери свой автомобиль</h1>
-                    <p className="mt-20 text-2xl">Bishkek, Kyrgyzstan</p>
+                    {isAllCarsPage && (
+                        <div className="relative w-[357px] h-[42px] bg-[#0B111C82] border border-white rounded-[30px] flex items-center">
+                            <FaSearch className="text-white absolute left-6" />
+                            <input
+                                type="text"
+                                placeholder="Поиск..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="bg-transparent w-full text-white outline-none pl-[50px] pr-4 placeholder-white"
+                            />
+                        </div>
+                    )}
+
+                    <nav className="flex gap-[40px] text-[22px] font-medium leading-[30px] font-montserrat text-white">
+                        <Link to="/" className="hover:text-blue-500 ml-[25px]">Главная</Link>
+                        <Link to="/about" className="hover:text-blue-500 ml-[25px]">О компании</Link>
+                        <Link to="/services" className="hover:text-blue-500 ml-[25px]">Услуги</Link>
+                        <Link to="/favorites" className="hover:text-blue-500 ml-[25px]">Избранное</Link>
+                    </nav>
                 </div>
-            </Container>
-
-
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-6">
-                <a href="#" className="hover:text-blue-400">
-                    <FaEnvelope size={28} />
-                </a>
-                <a href="#" className="hover:text-blue-400">
-                    <FaInstagram size={28} />
-                </a>
-                <a href="#" className="hover:text-blue-400">
-                    <FaTwitter size={28} />
-                </a>
+                <Link
+                    to="/register"
+                    className="border border-white w-[200px] h-[45px] flex items-center justify-center rounded-[10px] text-white bg-transparent hover:bg-blue-500 transition"
+                >
+                    Регистрация
+                </Link>
             </div>
         </header>
     );
+
+    return isAllCarsPage ? headerContent : <Container>{headerContent}</Container>;
 };
 
 export default Header;

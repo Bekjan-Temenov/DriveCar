@@ -7,9 +7,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        monsterrat: ['Montserrat', 'sans-serif'],
+        monsterrat: ['Montserrat', 'sans-serif','Exo'],
+
       }
     },
   },
   plugins: [],
 }
+

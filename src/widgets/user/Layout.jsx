@@ -1,16 +1,19 @@
 import React from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header/Header";
-import { Outlet } from "react-router-dom";
 import Footer from "./Footer/Footer";
 
 const Layout = () => {
-  return (
-    <div>
-      <Header />
-      <Outlet />
-      <Footer />
-    </div>
-  );
+    const location = useLocation();
+    const hideHeaderAndFooter = location.pathname === "/register";
+
+    return (
+        <div>
+            {/*{!hideHeaderAndFooter && <Header />}*/}
+            <Outlet />
+
+        </div>
+    );
 };
 
 export default Layout;
